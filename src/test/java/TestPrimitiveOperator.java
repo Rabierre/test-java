@@ -41,7 +41,7 @@ public class TestPrimitiveOperator {
 
         int intMax = 0x7fffffff;    // intMax
         System.out.println(intMax);
-        int negativeInt = 0xffffffff;        // -1, 0이 아닌 이유는 0x00000000이 있기때문.
+        int negativeInt = 0xffffffff;        // -1, 0이 아닌 이유는 0x00000000이 이미 0이기때문.
         System.out.println(negativeInt); //최상위비트가 1이면 값은 -1 + -(나머지 31개의 비트값)이 된다.
         negativeInt += 0x7fffffff;   // intMax - 1, 위에서 0을 건너뛰고 -1이 되었으므로 +1을 더 해줘야함.
         System.out.println(negativeInt);
