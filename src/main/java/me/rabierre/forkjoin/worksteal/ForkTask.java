@@ -68,8 +68,9 @@ public class ForkTask extends RecursiveAction {
         long startTime = System.currentTimeMillis();
         pool.invoke(forkTask);
         long endTime = System.currentTimeMillis();
+        /** info idle time took was 75secs, actual was 100.488secs */
         System.out.println("total time : " + (endTime - startTime)/1000 + "seconds");
-        /** steal count is only 4. what this means? */
+        /** info steal count is only 4. what this means? */
         System.out.println("Work steal count : " + pool.getStealCount());
     }
 }
