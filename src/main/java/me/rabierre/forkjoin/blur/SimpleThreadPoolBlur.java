@@ -13,7 +13,7 @@ import java.io.File;
  * Time: 오후 1:39
  * To change this template use File | Settings | File Templates.
  */
-public class ThreadPoolBlur {
+public class SimpleThreadPoolBlur {
     protected int[] source;
     protected int[] destination;
     protected int start;
@@ -23,7 +23,7 @@ public class ThreadPoolBlur {
 
     private final int THREAD_NUMBER = 10;
 
-    public ThreadPoolBlur(int[] source, int start, int length, int[] destination) {
+    public SimpleThreadPoolBlur(int[] source, int start, int length, int[] destination) {
         this.source = source;
         this.destination = destination;
         this.start = start;
@@ -57,14 +57,14 @@ public class ThreadPoolBlur {
         for (int i = 0; i < threadPool.length; i++) {
             int split = (i != THREAD_NUMBER - 1) ? (source.length / THREAD_NUMBER) : (source.length % THREAD_NUMBER);
 
-            BlurRunner runner = new BlurRunner(new ThreadPoolBlur(source, split * i, split, destination));
+            BlurRunner runner = new BlurRunner(new SimpleThreadPoolBlur(source, split * i, split, destination));
             threadPool[i] = new Thread(runner);
         }
 
-        long startTime = System.currentTimeMillis();
         for (Thread thread : threadPool) {
             thread.start();
         }
+
         try {
             for (Thread thread : threadPool) {
                 thread.join();
@@ -72,9 +72,6 @@ public class ThreadPoolBlur {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        long endTime = System.currentTimeMillis();
-
-        System.out.println("Thread Pool blur took " + (endTime - startTime) + " milliseconds. Thread Count is " + THREAD_NUMBER);
     }
 
     public static void main(String[] args) throws Exception {
@@ -104,7 +101,7 @@ public class ThreadPoolBlur {
                 "available");
 
         /** START */
-        ThreadPoolBlur threadPoolBlur = new ThreadPoolBlur(src, 0, src.length, dst);
+        SimpleThreadPoolBlur threadPoolBlur = new SimpleThreadPoolBlur(src, 0, src.length, dst);
 
         long startTime = System.currentTimeMillis();
         threadPoolBlur.blur();
@@ -122,9 +119,9 @@ public class ThreadPoolBlur {
 }
 
 class BlurRunner implements Runnable {
-    ThreadPoolBlur blur;
+    SimpleThreadPoolBlur blur;
 
-    BlurRunner(ThreadPoolBlur blur) {
+    BlurRunner(SimpleThreadPoolBlur blur) {
         this.blur = blur;
     }
 

@@ -104,7 +104,6 @@ public class ForkBlur extends RecursiveAction {
     }
 
     // Plumbing follows.
-
     public static void main(String[] args) throws Exception {
         String filename = "ngc_trees and the blue pond.jpg";
         File file = new File(filename);
@@ -140,7 +139,6 @@ public class ForkBlur extends RecursiveAction {
         long startTime = System.currentTimeMillis();
         pool.invoke(fb);
         long endTime = System.currentTimeMillis();
-
         /** END */
 
         System.out.println("Image blur took " + (endTime - startTime) + " milliseconds.");

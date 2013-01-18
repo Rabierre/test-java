@@ -55,12 +55,10 @@ public class IterationTest {
         this.testMap1 = new HashMap<Integer, String>();
         this.testMap2 = new HashMap<Integer, String>();
 
-
         for (int i = 0; i < 10; i++) {
             testMap1.put(i, i + "");
             testMap2.put(i + 10, (i + 10) + "");
         }
-
     }
 
     public static void main(String[] args) {
