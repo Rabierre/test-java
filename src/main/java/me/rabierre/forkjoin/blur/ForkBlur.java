@@ -1,4 +1,4 @@
-package me.rabierre.forkjoin;
+package me.rabierre.forkjoin.blur;
 
 /*
 * Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
@@ -31,7 +31,7 @@ package me.rabierre.forkjoin;
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-import me.rabierre.forkjoin.window.ImageFrame;
+import me.rabierre.forkjoin.blur.window.ImageFrame;
 
 import java.awt.image.*;
 import java.io.*;

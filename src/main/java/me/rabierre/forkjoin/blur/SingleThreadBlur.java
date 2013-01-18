@@ -1,4 +1,4 @@
-package me.rabierre.forkjoin;
+package me.rabierre.forkjoin.blur;
 
 /**
  * Created with IntelliJ IDEA.

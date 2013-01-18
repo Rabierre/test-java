@@ -30,7 +30,7 @@ public class IterationTest {
     }
 
     /**
-     * Map.remove(i) is unsafe here. if map has changed "Iterator" throw ConcurrentModificationException
+     * Map.remove(i) is unsafe here. if map has been changed then "Iterator" throw ConcurrentModificationException
      *
      * see javadoc
      *  The iterators returned by this class's iterator and listIterator methods are fail-fast:

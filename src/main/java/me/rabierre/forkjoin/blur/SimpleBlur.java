@@ -1,20 +1,19 @@
-package me.rabierre.forkjoin;
+package me.rabierre.forkjoin.blur;
 
-import me.rabierre.forkjoin.window.ImageFrame;
+import me.rabierre.forkjoin.blur.window.ImageFrame;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created with IntelliJ IDEA.
  * User: seojihye
- * Date: 13. 1. 12.
- * Time: 오후 1:39
+ * Date: 13. 1. 11.
+ * Time: 오후 3:36
  * To change this template use File | Settings | File Templates.
  */
-public class ThreadPoolBlur {
+public class SimpleBlur {
     protected int[] source;
     protected int[] destination;
     protected int start;
@@ -22,9 +21,7 @@ public class ThreadPoolBlur {
 
     protected int blurWidth = 15;
 
-    private final int THREAD_NUMBER = 10;
-
-    public ThreadPoolBlur(int[] source, int start, int length, int[] destination) {
+    public SimpleBlur(int[] source, int start, int length, int[] destination) {
         this.source = source;
         this.destination = destination;
         this.start = start;
@@ -53,44 +50,19 @@ public class ThreadPoolBlur {
         }
     }
 
-    public void blur() {
-        Thread[] threadPool = new Thread[THREAD_NUMBER];
-        for (int i = 0; i < threadPool.length; i++) {
-            int split = (i != THREAD_NUMBER - 1) ? (source.length / THREAD_NUMBER) : (source.length % THREAD_NUMBER);
-
-            BlurRunner runner = new BlurRunner(new ThreadPoolBlur(source, split * i, split, destination));
-            threadPool[i] = new Thread(runner);
-        }
-
-        long startTime = System.currentTimeMillis();
-        for (Thread thread : threadPool) {
-            thread.start();
-        }
-        try {
-            for (Thread thread : threadPool) {
-                thread.join();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        long endTime = System.currentTimeMillis();
-
-        System.out.println("Thread Pool blur took " + (endTime - startTime) + " milliseconds. Thread Count is " + THREAD_NUMBER);
-    }
-
     public static void main(String[] args) throws Exception {
         String filename = "ngc_trees and the blue pond.jpg";
         File file = new File(filename);
         BufferedImage image = ImageIO.read(file);
 
-        new ImageFrame("ThreadPool - original", image);
+        new ImageFrame("SimpleBlur - original", image);
 
         BufferedImage blurredImage = blur(image);
 
-        new ImageFrame("ThreadPool - processed", blurredImage);
+        new ImageFrame("SimpleBlur - processed", blurredImage);
     }
 
-    public static BufferedImage blur(BufferedImage srcImage) throws InterruptedException {
+    public static BufferedImage blur(BufferedImage srcImage) {
         int w = srcImage.getWidth();
         int h = srcImage.getHeight();
 
@@ -105,32 +77,19 @@ public class ThreadPoolBlur {
                 "available");
 
         /** START */
-        ThreadPoolBlur threadPoolBlur = new ThreadPoolBlur(src, 0, src.length, dst);
+        SimpleBlur simpleBlur = new SimpleBlur(src, 0, src.length, dst);
 
         long startTime = System.currentTimeMillis();
-        threadPoolBlur.blur();
+        simpleBlur.computeDirectly();
         long endTime = System.currentTimeMillis();
         /** END */
 
-        System.out.println("Image blur took " + (endTime - startTime) + " milliseconds.");
+        System.out.println("Simple blur took " + (endTime - startTime) + " milliseconds.");
 
         BufferedImage dstImage =
                 new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         dstImage.setRGB(0, 0, w, h, dst, 0, w);
 
         return dstImage;
-    }
-}
-
-class BlurRunner implements Runnable {
-    ThreadPoolBlur blur;
-
-    BlurRunner(ThreadPoolBlur blur) {
-        this.blur = blur;
-    }
-
-    @Override
-    public void run() {
-        blur.computeDirectly();
     }
 }

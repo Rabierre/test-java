@@ -1,4 +1,4 @@
-package me.rabierre.forkjoin.window;
+package me.rabierre.forkjoin.blur.window;
 
 import javax.swing.*;
 import java.awt.*;

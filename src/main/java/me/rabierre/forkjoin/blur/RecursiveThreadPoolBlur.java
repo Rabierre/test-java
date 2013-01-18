@@ -1,6 +1,6 @@
-package me.rabierre.forkjoin;
+package me.rabierre.forkjoin.blur;
 
-import me.rabierre.forkjoin.window.ImageFrame;
+import me.rabierre.forkjoin.blur.window.ImageFrame;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
