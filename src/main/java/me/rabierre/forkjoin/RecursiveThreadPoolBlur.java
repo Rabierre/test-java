@@ -1,5 +1,10 @@
 package me.rabierre.forkjoin;
 
+import me.rabierre.forkjoin.window.ImageFrame;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +15,7 @@ import java.util.List;
  * Time: 오후 3:46
  * To change this template use File | Settings | File Templates.
  */
-public class RecursiveThreadBlur extends Thread implements Runnable {
+public class RecursiveThreadPoolBlur implements Runnable {
     protected int[] source;
     protected int[] destination;
     protected int start;
@@ -20,7 +25,7 @@ public class RecursiveThreadBlur extends Thread implements Runnable {
 
     private static List<Thread> threadList = new ArrayList<Thread>();   // todo static thread list is dangerous.
 
-    public RecursiveThreadBlur(int[] source, int start, int length, int[] destination) {
+    public RecursiveThreadPoolBlur(int[] source, int start, int length, int[] destination) {
         this.source = source;
         this.start = start;
         this.length = length;
@@ -29,16 +34,16 @@ public class RecursiveThreadBlur extends Thread implements Runnable {
 
     private static int sThreshold = 10000;
 
-    private synchronized void taskDived() {
+    private synchronized void divedTask() {
         if (length < sThreshold) {
-            threadList.add(this);
+            threadList.add(new Thread(this));
             return;
         }
 
         final int split = length / 2;
 
-        new RecursiveThreadBlur(source, start, split, destination).taskDived();
-        new RecursiveThreadBlur(source, start + split, length - split, destination).taskDived();
+        new RecursiveThreadPoolBlur(source, start, split, destination).divedTask();
+        new RecursiveThreadPoolBlur(source, start + split, length - split, destination).divedTask();
     }
 
     public void compute() throws InterruptedException {
@@ -55,8 +60,8 @@ public class RecursiveThreadBlur extends Thread implements Runnable {
 
     public int[] blur() throws InterruptedException {
         long startTime = System.currentTimeMillis();
-        taskDived();    // dived task into small pieces enough to execute and assign to thread
-        compute();
+        divedTask();    // dived task into small pieces enough to execute and assign to thread
+        compute();      // parallel compute
         long endTime = System.currentTimeMillis();
 
         System.out.println("Recursive Thread blur took " + (endTime - startTime) + " milliseconds.");
@@ -85,5 +90,49 @@ public class RecursiveThreadBlur extends Thread implements Runnable {
                     (((int) bt) << 0);
             destination[index] = dpixel;
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        String filename = "ngc_trees and the blue pond.jpg";
+        File file = new File(filename);
+        BufferedImage image = ImageIO.read(file);
+
+        new ImageFrame("RecursiveThreadPoolBlur - original", image);
+
+        BufferedImage blurredImage = blur(image);
+
+        new ImageFrame("RecursiveThreadPoolBlur - processed", blurredImage);
+    }
+
+    public static BufferedImage blur(BufferedImage srcImage) throws InterruptedException {
+        int w = srcImage.getWidth();
+        int h = srcImage.getHeight();
+
+        int[] src = srcImage.getRGB(0, 0, w, h, null, 0, w);
+        int[] dst = new int[src.length];
+
+        System.out.println("Array size is " + src.length);
+        System.out.println("Threshold is " + sThreshold);
+
+        int processors = Runtime.getRuntime().availableProcessors();
+        System.out.println(Integer.toString(processors) + " processor" +
+                (processors != 1 ? "s are " : " is ") +
+                "available");
+
+        /** START */
+        RecursiveThreadPoolBlur recursiveThreadBlur = new RecursiveThreadPoolBlur(src, 0, src.length, dst);
+
+        long startTime = System.currentTimeMillis();
+        recursiveThreadBlur.blur();
+        long endTime = System.currentTimeMillis();
+        /** END */
+
+        System.out.println("Image blur took " + (endTime - startTime) + " milliseconds.");
+
+        BufferedImage dstImage =
+                new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        dstImage.setRGB(0, 0, w, h, dst, 0, w);
+
+        return dstImage;
     }
 }

@@ -12,6 +12,7 @@ import static org.hamcrest.CoreMatchers.is;
  * To change this template use File | Settings | File Templates.
  */
 public class TestPrimitiveOperator {
+
     @Test
     public void testRightShift() {
         int number = 8;

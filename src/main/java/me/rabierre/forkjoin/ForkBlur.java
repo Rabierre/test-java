@@ -57,8 +57,6 @@ public class ForkBlur extends RecursiveAction {
 
     private int mBlurWidth = 15; // Processing window size, should be odd.
 
-    private static int count = 0;
-
     public ForkBlur(int[] src, int start, int length, int[] dst) {
         mSource = src;
         mStart = start;
@@ -96,7 +94,6 @@ public class ForkBlur extends RecursiveAction {
         /** HERE */
         if (mLength < sThreshold) {
             computeDirectly();
-            count++;
             return;
         }
 
@@ -143,6 +140,7 @@ public class ForkBlur extends RecursiveAction {
         long startTime = System.currentTimeMillis();
         pool.invoke(fb);
         long endTime = System.currentTimeMillis();
+
         /** END */
 
         System.out.println("Image blur took " + (endTime - startTime) + " milliseconds.");
@@ -151,7 +149,6 @@ public class ForkBlur extends RecursiveAction {
                 new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         dstImage.setRGB(0, 0, w, h, dst, 0, w);
 
-        System.out.println(ForkBlur.count);
         return dstImage;
     }
 }
