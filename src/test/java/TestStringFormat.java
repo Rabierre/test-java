@@ -39,6 +39,6 @@ public class TestStringFormat {
         String s = String.format("Amount : %08d", 221);
         System.out.println(s);
 
-        System.out.printf("Amount : %08d %n" , 221);
+        System.out.printf("Amount : %08d %n" , 221/60);
     }
 }
