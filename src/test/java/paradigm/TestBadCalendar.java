@@ -1,7 +1,7 @@
 package paradigm;
 
-import me.rabierre.paradigm.BadCalendar;
-import me.rabierre.paradigm.BadMonth;
+import me.rabierre.paradigm.badcalendar.Calendar;
+import me.rabierre.paradigm.badcalendar.Month;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertThat;
 public class TestBadCalendar {
     @Test
     public void testIsLeapYear() {
-        BadCalendar badCalendar = new BadCalendar();
+        Calendar badCalendar = new Calendar();
 
         int year = 2000;
         boolean isLeap = badCalendar.isLeapYear(year);
@@ -35,7 +35,7 @@ public class TestBadCalendar {
     @Test
     public void testPrint() {
         int year = 2013;
-        BadCalendar calendar = new BadCalendar(year);
+        Calendar calendar = new Calendar(year);
 
         boolean isLeap = calendar.isLeapYear(year);
         assertThat(isLeap, is(false));
@@ -46,14 +46,14 @@ public class TestBadCalendar {
     @Test
     public void testMonthArray() {
         /** 2013 */
-        BadCalendar calendar = new BadCalendar(2013);
+        Calendar calendar = new Calendar(2013);
         int startDay = calendar.getStartDay();
 
-        BadMonth[] actual = calendar.getMonths();
-        BadMonth[] expect = {new BadMonth(1, startDay, false), new BadMonth(2, startDay, false), new BadMonth(3, startDay, false),
-                new BadMonth(4, startDay, false), new BadMonth(5, startDay, false), new BadMonth(6, startDay, false),
-                new BadMonth(7, startDay, false), new BadMonth(8, startDay, false), new BadMonth(9, startDay, false),
-                new BadMonth(10, startDay, false), new BadMonth(11, startDay, false), new BadMonth(12, startDay, false)};
+        Month[] actual = calendar.getMonths();
+        Month[] expect = {new Month(1, startDay, false), new Month(2, startDay, false), new Month(3, startDay, false),
+                new Month(4, startDay, false), new Month(5, startDay, false), new Month(6, startDay, false),
+                new Month(7, startDay, false), new Month(8, startDay, false), new Month(9, startDay, false),
+                new Month(10, startDay, false), new Month(11, startDay, false), new Month(12, startDay, false)};
 
         assertThat(actual, is(expect));
     }
