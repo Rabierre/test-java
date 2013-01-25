@@ -20,8 +20,10 @@ public class Month {
 
     public void print() {
         System.out.println("MONTH : " + month);
+        System.out.println("sun\tmon\ttue\twed\tthu\tfri\tsat");
 
-        String days = "sun\tmon\ttue\twed\tthu\tfri\tsat\n";
+        String days = "";
+
         for (int i = 1; i <= startDate; i++) {
             days += "\t";
         }
@@ -31,8 +33,7 @@ public class Month {
             days += ((i + startDate) % 7 == 0 ? "\n" : "\t");
         }
 
-        System.out.println(days);
-        System.out.println();
+        System.out.println(days + "\n");
     }
 
     @Override
