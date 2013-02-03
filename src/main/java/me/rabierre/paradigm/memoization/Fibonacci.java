@@ -6,7 +6,7 @@ import java.util.Arrays;
  * pilot code for test memoization.
  */
 public class Fibonacci {
-    private static final Integer INVALID_VALUE = -1;
+    private final Integer INVALID_VALUE = -1;
 
     private int recursiveCount = 0;
     private Integer[] reserved = null;
@@ -28,10 +28,7 @@ public class Fibonacci {
 
         if (reserved[n] != INVALID_VALUE) return reserved[n];
 
-        int a = computeWithMemoization(n - 1);
-        int b = computeWithMemoization(n - 2);
-
-        reserved[n] = a + b;
+        reserved[n] = computeWithMemoization(n - 1) + computeWithMemoization(n - 2);
 
         return reserved[n];
     }
